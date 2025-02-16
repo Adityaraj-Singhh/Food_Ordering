@@ -2,7 +2,7 @@ import Loader from "./Loader";
 import { Link, useParams } from "react-router-dom";
 import useResMenu from "../utils/useResMenu";
 import MenuCatagory from "../components/MenuCatagory";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUp,
@@ -14,17 +14,41 @@ import {
 import fssaiLogo from "../utils/images/fssai.png";
 import { useSelector } from "react-redux";
 
+const ApiKey = '7dfcfb736685c8b7';
+const EDUCORS_URL = 'https://educorssolver.host/api/getData';
+
+
 const ResMenu = () => {
   const [showIndex, setShowIndex] = useState(0);
   const [isBestSellerActive, setisBestSellerActive] = useState(false);
   const [showVeg, setShowVeg] = useState(false);
   const [showNonVeg, setShowNonVeg] = useState(false);
   const [showBestseller, setShowBestseller] = useState(false);
+  const [resInfo, setResInfo] = useState(null);
   const isVisible = useSelector((store) => store.cart.ShowToaster);
   const cartItems = useSelector((store) => store.cart.items);
 
   const { ResId } = useParams();
-  const resInfo = useResMenu(ResId);
+  
+
+  const Target = `https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=31.00480&lng=75.94630&restaurantId=${ResId}`;
+
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(
+          `${EDUCORS_URL}?ApiKey=${ApiKey}&Target=${encodeURIComponent(Target)}`
+        );
+        const json = await response.json();
+        setResInfo(json?.data);
+      } catch (error) {
+        console.error("Failed to fetch menu:", error);
+      }
+    };
+
+    fetchMenu();
+  }, [ResId]);
 
   if (resInfo === null) return <Loader />;
 
