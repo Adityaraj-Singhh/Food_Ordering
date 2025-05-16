@@ -77,8 +77,8 @@ const fetchData = async () => {
 
     // console.log(json.data.cards[2].card.card.gridElements.infoWithStyle.restaurants);
 
-    setRestaurantsList(json?.data?.cards[2].card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setSearchedRestaurents(json?.data?.cards[2].card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setRestaurantsList(json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setSearchedRestaurents(json?.data?.cards?.[2]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
 }
 
 useEffect(()=>{
@@ -91,7 +91,7 @@ useEffect(()=>{
   const toggleVeg = () => {
     const vegRestaurants = showVeg
       ? restaurantsList
-      : restaurantsList.filter((res) => res.info.veg === true);
+      : restaurantsList.filter((res) => res.info?.veg === true);
 
     setSearchedRestaurents(vegRestaurants);
     setShowVeg(!showVeg);
@@ -131,7 +131,7 @@ useEffect(()=>{
 
   const filterTopRated = () => {
     const topRatedRes = restaurantsList.filter(
-      (res) => res.info.avgRating > 4.2
+      (res) => res.info?.avgRating > 4.2
     );
 
     setIsTopRatedActive(!isTopRatedActive);
@@ -176,7 +176,7 @@ useEffect(()=>{
 
   const filterLessCost = () => {
     const lesscostRes = restaurantsList.filter(
-      (res) => res.info.avgRating > 4.6
+      (res) => res.info?.avgRating > 4.6
     );
     setIsTopRatedActive(false);
     setIsFastDeliveryActive(false);
@@ -201,8 +201,8 @@ useEffect(()=>{
 
     const filteredRestaurent = restaurantsList.filter(
       (res) =>
-        res.info.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-        res.info.cuisines.some((cuisine) =>
+        res.info?.name?.toLowerCase().includes(searchInput.toLowerCase()) ||
+        res.info?.cuisines?.some((cuisine) =>
           cuisine.toLowerCase().includes(searchInput.toLowerCase())
         )
     );
@@ -268,8 +268,8 @@ useEffect(()=>{
   const handleImageClick = (altText) => {
     const filteredRestaurent = restaurantsList.filter(
       (res) =>
-        res.info.name.toLowerCase().includes(altText.toLowerCase()) ||
-        res.info.cuisines.some((cuisine) =>
+        res.info?.name?.toLowerCase().includes(altText.toLowerCase()) ||
+        res.info?.cuisines?.some((cuisine) =>
           cuisine.toLowerCase().includes(altText.toLowerCase())
         )
     );
@@ -326,7 +326,7 @@ useEffect(()=>{
         </p>
       </div>
     </div>
-  ) : restaurantsList.length === 0 ? (
+  ) : restaurantsList?.length === 0 ? (
     <div className="shimmer-container pt-[4rem] md:pt-[6rem]">
       <Shimmer />
     </div>
@@ -539,13 +539,13 @@ useEffect(()=>{
           )}
 
           <div className="flex flex-wrap justify-center slide-up">
-            {searchedRestaurents.map((restaurant) => (
+            {searchedRestaurents?.map((restaurant) => (
               <Link
-                to={`/restaurant/${restaurant.info.id}`}
-                key={restaurant.info.id}
+                to={`/restaurant/${restaurant.info?.id}`}
+                key={restaurant.info?.id}
                 className="transform transition-transform duration-500 ease-in-out hover:scale-90"
               >
-                {restaurant.info.avgRating > 4.2 ? (
+                {restaurant.info?.avgRating > 4.2 ? (
                   <FreeDelivery resData={restaurant} label={"Free Delivery"} />
                 ) : (
                   <ResCard resData={restaurant} />
